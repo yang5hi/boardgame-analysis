@@ -49,7 +49,7 @@ function UpdatePage() {
       } else if (key=='minage') {
         d3.select("#game-info-basic").append("p").append("strong").text(`Min Player Age:  ${value}`);
       } else if (key=='minplayers') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Min Players:  ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Min Payers:  ${value}`);
       } else if (key=='maxplayers') {
         d3.select("#game-info-basic").append("p").append("strong").text(`Max Players:  ${value}`);
       } else if (key=='gamelink') {

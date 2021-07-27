@@ -85,8 +85,17 @@ def prediction():
     RF_pred = [round(y_pred[0], 2)]
     print(f'RF prediction= {RF_pred[0]}')
     print(X_pred[0])
+    
+    news_df=pd.read_sql_query('select * from news', con=engine)
+    game_info_df=pd.read_sql_query('select * from game_info', con=engine)
+    ranking_200_df=pd.read_sql_query('select * from ranking_200', con=engine)
+    news_dict=news_df.to_dict()
+    game_info_dict=game_info_df.T.to_dict()
+    ranking_200_df.set_index('BoardGameRank', inplace=True)
+    ranking_dict=ranking_200_df.to_dict()
+    bggData=[news_dict,game_info_dict,ranking_dict]
 
-    return render_template("index.html", RF_pred=RF_pred[0], X_pred=X_pred[0])
+    return render_template("index.html", bggData=bggData,RF_pred=RF_pred[0], X_pred=X_pred[0])
 
 @app.route("/scrape")
 def scraper():
