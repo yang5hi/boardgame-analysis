@@ -1,8 +1,7 @@
 # Dependencies
-from types import new_class
 import numpy as np
 import pandas as pd
-from flask import Flask, render_template, request,redirect, jsonify
+from flask import Flask, render_template, request,redirect
 from sqlalchemy import create_engine
 import bgg_sql
 
@@ -86,7 +85,6 @@ def scraper():
     game_info_selected_df=boardgame_data[1]
     news_df=boardgame_data[2]
     # Load dataframes into databases
-    
     ranking_200_df.to_sql(name = 'ranking_200', con = engine, if_exists = 'replace', index = True)
     game_info_selected_df.to_sql(name = 'game_info', con = engine, if_exists = 'replace', index = True)
     news_df.to_sql(name = 'news', con = engine, if_exists = 'replace', index = False)
