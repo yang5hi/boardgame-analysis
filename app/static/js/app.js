@@ -54,7 +54,7 @@ function UpdatePage() {
         d3.select("#game-info-basic").append("p").append("strong").text(`Min Play Time:  ${value} minutes`);
       } else if (key=='gamelink') {
         d3.select("#game-info-basic").append("a").attr("href",`https://boardgamegeek.com${value}`).attr("id","game-link");
-        d3.select("#game-link").append("strong").append("p").text(`Game Link: \n https://boardgamegeek.com${value}`);
+        d3.select("#game-link").append("strong").append("p").text(`Game Link: \n https://boardgamegeek.com${value}`).attr("class","text-sucess");
       }
     });
     //------------------------Update the Plots-----------------------------------------------------------

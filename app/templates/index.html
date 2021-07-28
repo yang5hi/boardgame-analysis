@@ -133,7 +133,7 @@
               </div>
               <img class="img-fluid" id="news-image" alt="Featured Game Image">
               <div class="card-footer">
-                <a href="https://boardgamegeek.com/blog/1/boardgamegeek-news"><h5>Read More...</h5></a>
+                <a class="text-muted" href="https://boardgamegeek.com/blog/1/boardgamegeek-news"><h5>Read More...</h5></a>
               </div>
             </div>
         </div>
@@ -183,7 +183,7 @@
               <li><i class="ri-check-double-line"></i> 
                 Opinions: The more desirable a game, the higher the rating; but a rating of 9 or 10 is hard to achieve.
                 </li>
-              <li><i class="ri-check-double-line"></i> Player: Not much variance with min number of players, the rating is going up with min age and min play time, but also maxed out ar 7/8.
+              <li><i class="ri-check-double-line"></i> Player: Not much variance with min number of players, the rating is going up with min age and min play time, but also maxed out at 7/8.
                 </li>
               <li><i class="ri-check-double-line"></i> Design: The dataset contains game published mostly in the past 50 years, the new games are having a higer rating compare to old ones. Higher rating games tends to have more mechanics and in multiple categories.</li>
             </ul>
@@ -375,7 +375,7 @@
               <h2>Model Predictions</h2>
               <h3>RandomForestRegressor<span> Predictor</span></h3>
               <p>Enter the values for 10 Independent variables, then hit the button.</p>
-              <a name="jump_here"></a>
+              <a name="predict_result"></a>
           </div>
           <div class="row">
                 <div class="col-lg-6">
@@ -422,7 +422,7 @@
                   <div class='row'>
                           <div class="text-center">
                             <p></p>
-                            <h3 ><a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html">Randomforest</a> PREDICTION</h3>
+                            <h3><a class="text-danger" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html">Randomforest</a> PREDICTION</h3>
                             <h3 id="result"><b>Rating: </b>{{ RF_pred }}</h3>
                           </div>
                           <p></p>
@@ -557,5 +557,5 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
   <!-- Our JavaScript -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-  <script> window.location.hash="jump_here"; </script>
+  <script> window.location.hash="predict_result"; </script>
 </html>
