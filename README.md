@@ -1,5 +1,7 @@
 # Board Game Analysis
 
+![home](image/home.png)
+
 ![flowchart](app/static/img/project_diagram.png)
 
 ## Rationale
@@ -8,7 +10,7 @@ BoardGameGeek is a valuable resource for boardgame information. We built a webpa
 
 ## Dashboard
 
-The index.html page will load with 
+The dashboard session will load with: 
 
 1. The latest Board Gaming News scrapped from boardgamegeek.com is loaded on a card on the right side of the HTML. It has the news title, image, link, and time information. Click the “Read More…” link to read the entire article.
 
