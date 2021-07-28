@@ -9,12 +9,13 @@ import os
 import re
 
 def scrape():
+    
     game_info_df=pd.read_csv("data/boardgames_07022021.csv")
     ranking_df=pd.read_csv("data/2021-07-24_game_id_rankings.csv")
 
     # Create database connection
     # change the owner name, password and port number based on your local situation
-    # engine = create_engine(f'postgresql://{*database_owner}:{*password}@localhost:{*port}/boardgame_db')
+    # engine = create_engine(f'postgresql://{*database_owner}:{*password}@localhost:{*port}/housing_db')
     rds_connection_string = "postgres:Di2JieDu@n@localhost:5432/boardgame_db"
     engine = create_engine(f'postgresql://{rds_connection_string}')
 
@@ -27,8 +28,8 @@ def scrape():
     news_titles = soup.find(class_='blog_post')
     # find the news title and image
     news_title = news_titles.find(class_='post_title').text.strip('\n')
-    featured_image_url = soup.find(class_="post-img").a.img['src'].strip('\n')
-    news_df=pd.DataFrame([{"news_title":news_title}, {"featured_image_url":featured_image_url}])
+    featured_image_url = soup.find(class_="post-img").a.img['src']
+    news_df=pd.DataFrame([{"news_title":news_title, "featured_image_url":featured_image_url}])
 
     # get the top 200 rankings
     ranking_df.drop_duplicates(subset=['BoardGameRank'], inplace=True)
@@ -56,7 +57,7 @@ def scrape():
         if game_id not in game_20k_set:
             print(f'{game_id} not found')
             game_out+=1
-    # print(f'there are/is {game_out} game(s) from top 200 games that not cover in the 20k game info')
+    print(f'there are/is {game_out} game(s) from top 200 games that not cover in the 30k game info')
 
     # add a column "is_top200" to game_info_df
     is_top200_list=[]
@@ -66,9 +67,10 @@ def scrape():
         else:
             is_top200_list.append(False)
     game_info_df['is_top200']=is_top200_list
+
     # remove unused info for this project
     game_info_df.loc[game_info_df.is_top200 == False, 'description'] = " "
-    
+
     # convert unicode to printable format
     a=game_info_df['name']
     kk=[]
@@ -78,16 +80,17 @@ def scrape():
         c=(x.encode('utf-8').decode('unicode-escape'))
         kk.append(c)
     game_info_df['game_name']=kk
+
     # convert description to JSON parsible format
     a=game_info_df['description']
     kk=[]
     for b in a:
-        b=re.sub(r'[^\x20-\x7F]',r' ', b)
+        b=re.sub(r'[^\x20-\x7F]',r'', b)
         b=b.replace('"',"|")
         kk.append(b)
     game_info_df['game_description']=kk
-    game_info_df = game_info_df.replace(to_replace= r'\\', value= '', regex=True)  
-    
+    game_info_df = game_info_df.replace(to_replace= r'\\', value= '', regex=True)
+
     # remove the rows which have invalid values
     game_info_df.drop(game_info_df[game_info_df['average'] ==0].index, inplace = True)
     game_info_df.drop(game_info_df[game_info_df['totalvotes'] ==0].index, inplace = True)
@@ -98,15 +101,16 @@ def scrape():
     game_info_selected_df=game_info_df[['objectid', 'game_name', 'game_description', 'yearpublished','is_top200',
                                     'average','numplays','maxplaytime','minage', 'languagedependence',
                                     'minplayers','maxplayers', 'minplaytime','gamelink','average', 'numwanting',
-                                     'siteviews', 'blogs', 'minage', 'news','podcast', 'totalvotes', 'numcomments',
-                                     'numgeeklists', 'weblink']].copy()
+                                    'siteviews', 'blogs', 'minage', 'news','podcast', 'totalvotes', 'numcomments',
+                                    'numgeeklists', 'weblink']].copy()
     # drop the duplicates based on objectid
     game_info_selected_df.drop_duplicates(subset=['objectid'], inplace=True)
     game_info_selected_df['objectid'] = game_info_selected_df.objectid.astype(str)
     game_info_selected_df.set_index('objectid', inplace=True)
+
     # Load dataframes into databases
-    ranking_int_df.to_sql(name = 'ranking_200', con = engine, if_exists = 'append', index = True)
-    game_info_selected_df.to_sql(name = 'game_info', con = engine, if_exists = 'append', index = True)
-    news_df.to_sql(name = 'news', con = engine, if_exists = 'append', index = False)
+    ranking_int_df.to_sql(name = 'ranking_200', con = engine, if_exists = 'replace', index = True)
+    game_info_selected_df.to_sql(name = 'game_info', con = engine, if_exists = 'replace', index = True)
+    news_df.to_sql(name = 'news', con = engine, if_exists = 'replace', index = False)
+
     return [ranking_int_df,game_info_selected_df, news_df]
-    

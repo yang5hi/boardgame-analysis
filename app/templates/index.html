@@ -89,7 +89,8 @@
           <br>
             <h3>Web App <span>Flowchart</span></h3>
             <br>
-            <img src="../static/img/project_diagram.png" class="img-fluid" alt="process flow">
+            <img src="../static/img/project_diagram.svg" class="img-fluid" alt="process flow">
+            <br><br>
         </div>
       </div>
     </div>
@@ -98,7 +99,6 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 text-center section-title">
-        <br><br>
         <h3>Top Board Games <span>Dashboard</span></h3>
         <br>
         <a href="/scrape" role="button"><h2>Scrape the News and Load the Data</h2></a>
@@ -375,7 +375,7 @@
               <h2>Model Predictions</h2>
               <h3>RandomForestRegressor<span> Predictor</span></h3>
               <p>Enter the values for 10 Independent variables, then hit the button.</p>
-              <a name="predict_result"></a>
+              <!-- <a name="predict_result"></a> -->
           </div>
           <div class="row">
                 <div class="col-lg-6">
@@ -557,5 +557,5 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
   <!-- Our JavaScript -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-  <script> window.location.hash="predict_result"; </script>
+  <!-- <script> window.location.hash="predict_result"; </script> -->
 </html>

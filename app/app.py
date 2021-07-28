@@ -28,6 +28,7 @@ bggData=[news_dict,game_info_dict,ranking_dict]
 y=game_info_df['average']
 X=game_info_df[['numwanting', 'siteviews', 'blogs', 'minage', 'news','podcast', 
 'totalvotes', 'numcomments', 'numgeeklists', 'weblink']].copy()
+
 # Scale the data
 from sklearn.preprocessing import MinMaxScaler
 X_scaler = MinMaxScaler().fit(X)
