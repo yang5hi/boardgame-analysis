@@ -45,13 +45,13 @@ function UpdatePage() {
       if (key=='game_description') {
         d3.select("#game-info-basic").append("p").append("strong").text(`Description: ${value}`);
       } else if (key=='yearpublished') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Published:  ${value}`);
+        d3.select("#game-info-basic").append("p").append("strong").text(`Year Published:  ${value}`);
       } else if (key=='minage') {
         d3.select("#game-info-basic").append("p").append("strong").text(`Min Player Age:  ${value}`);
       } else if (key=='minplayers') {
         d3.select("#game-info-basic").append("p").append("strong").text(`Min Payers:  ${value}`);
-      } else if (key=='maxplayers') {
-        d3.select("#game-info-basic").append("p").append("strong").text(`Max Players:  ${value}`);
+      } else if (key=='minplaytime') {
+        d3.select("#game-info-basic").append("p").append("strong").text(`Min Play Time:  ${value} minutes`);
       } else if (key=='gamelink') {
         d3.select("#game-info-basic").append("a").attr("href",`https://boardgamegeek.com${value}`).attr("id","game-link");
         d3.select("#game-link").append("strong").append("p").text(`Game Link: \n https://boardgamegeek.com${value}`);

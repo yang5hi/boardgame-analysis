@@ -87,11 +87,19 @@ def scrape():
         kk.append(b)
     game_info_df['game_description']=kk
     game_info_df = game_info_df.replace(to_replace= r'\\', value= '', regex=True)  
+    
+    # remove the rows which have invalid values
+    game_info_df.drop(game_info_df[game_info_df['average'] ==0].index, inplace = True)
+    game_info_df.drop(game_info_df[game_info_df['totalvotes'] ==0].index, inplace = True)
+    # drop the null rows
+    game_info_df.dropna(inplace=True)
 
     # get only the needed columns
     game_info_selected_df=game_info_df[['objectid', 'game_name', 'game_description', 'yearpublished','is_top200',
                                     'average','numplays','maxplaytime','minage', 'languagedependence',
-                                    'minplayers','maxplayers', 'minplaytime','gamelink']].copy()
+                                    'minplayers','maxplayers', 'minplaytime','gamelink','average', 'numwanting',
+                                     'siteviews', 'blogs', 'minage', 'news','podcast', 'totalvotes', 'numcomments',
+                                     'numgeeklists', 'weblink']].copy()
     # drop the duplicates based on objectid
     game_info_selected_df.drop_duplicates(subset=['objectid'], inplace=True)
     game_info_selected_df['objectid'] = game_info_selected_df.objectid.astype(str)

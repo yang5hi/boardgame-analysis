@@ -9,29 +9,26 @@ import bgg_sql
 # Create an instance of Flask
 app = Flask(__name__)
 
+# =========================================================================================================
 # Create database connection
 # change the owner name, password and port number based on your local situation
 # engine = create_engine(f'postgresql://{*database_owner}:{*password}@localhost:{*port}/housing_db')
 rds_connection_string = "postgres:Di2JieDu@n@localhost:5432/boardgame_db"
 engine = create_engine(f'postgresql://{rds_connection_string}')
-
-# =========================================================================================================
 # read in csv file
-game_info_df=pd.read_csv("data/boardgames_07022021.csv")
-# remove duplicate games
-game_info_df.drop_duplicates(subset=['objectid'], inplace=True)
-# choose the features based on correlations
-game_info_df=game_info_df[['average', 'numwanting', 'siteviews', 'blogs', 'minage', 'news',
-                           'podcast', 'totalvotes', 'numcomments', 'numgeeklists', 'weblink']].copy()
-# remove the rows which have invalid values
-game_info_df.drop(game_info_df[game_info_df['average'] ==0].index, inplace = True)
-game_info_df.drop(game_info_df[game_info_df['totalvotes'] ==0].index, inplace = True)
-# drop the null rows
-game_info_df.dropna(inplace=True)
+news_df=pd.read_sql_query('select * from news', con=engine)
+game_info_df=pd.read_sql_query('select * from game_info', con=engine)
+ranking_200_df=pd.read_sql_query('select * from ranking_200', con=engine)
+news_dict=news_df.to_dict()
+game_info_dict=game_info_df.T.to_dict()
+ranking_200_df.set_index('BoardGameRank', inplace=True)
+ranking_dict=ranking_200_df.to_dict()
+bggData=[news_dict,game_info_dict,ranking_dict]
 # =========================================================================================================
 # Set features (X) and target (y)
 y=game_info_df['average']
-X=game_info_df.drop(['average'],axis=1)
+X=game_info_df[['numwanting', 'siteviews', 'blogs', 'minage', 'news','podcast', 
+'totalvotes', 'numcomments', 'numgeeklists', 'weblink']].copy()
 # Scale the data
 from sklearn.preprocessing import MinMaxScaler
 X_scaler = MinMaxScaler().fit(X)
@@ -51,14 +48,7 @@ X_pred=[]
 @app.route("/")
 def home():
     print(f"home")
-    news_df=pd.read_sql_query('select * from news', con=engine)
-    game_info_df=pd.read_sql_query('select * from game_info', con=engine)
-    ranking_200_df=pd.read_sql_query('select * from ranking_200', con=engine)
-    news_dict=news_df.to_dict()
-    game_info_dict=game_info_df.T.to_dict()
-    ranking_200_df.set_index('BoardGameRank', inplace=True)
-    ranking_dict=ranking_200_df.to_dict()
-    bggData=[news_dict,game_info_dict,ranking_dict]
+
     # Return template and data
     return render_template("index.html", bggData=bggData, RF_pred=RF_pred[0],X_pred=X_pred)
 
@@ -86,15 +76,6 @@ def prediction():
     print(f'RF prediction= {RF_pred[0]}')
     print(X_pred[0])
     
-    news_df=pd.read_sql_query('select * from news', con=engine)
-    game_info_df=pd.read_sql_query('select * from game_info', con=engine)
-    ranking_200_df=pd.read_sql_query('select * from ranking_200', con=engine)
-    news_dict=news_df.to_dict()
-    game_info_dict=game_info_df.T.to_dict()
-    ranking_200_df.set_index('BoardGameRank', inplace=True)
-    ranking_dict=ranking_200_df.to_dict()
-    bggData=[news_dict,game_info_dict,ranking_dict]
-
     return render_template("index.html", bggData=bggData,RF_pred=RF_pred[0], X_pred=X_pred[0])
 
 @app.route("/scrape")
